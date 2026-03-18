@@ -48,5 +48,8 @@ export const api = {
 };
 
 export function photoUrl(filename) {
-  return filename ? `/uploads/${filename}` : null;
+  if (!filename) return null;
+  // If it's already a full URL (CDN photo), use it directly
+  if (filename.startsWith("http")) return filename;
+  return `/uploads/${filename}`;
 }

@@ -35,9 +35,14 @@ export default function HomePage() {
         <h1 style={{ fontFamily: "'Playfair Display', serif", fontSize: "clamp(1.8rem, 5vw, 3.5rem)", color: "white", textAlign: "center", fontWeight: 700, lineHeight: 1.2, marginBottom: "1rem", maxWidth: "680px" }}>
           Find Your Perfect Boat
         </h1>
-        <p style={{ color: "rgba(255,255,255,0.65)", fontSize: "1.05rem", textAlign: "center", maxWidth: "480px", marginBottom: "2.5rem", lineHeight: 1.7 }}>
-          Sailboats, motorboats, and yachts listed by owners and dealers nationwide.
+        <p style={{ color: "rgba(255,255,255,0.65)", fontSize: "1.05rem", textAlign: "center", maxWidth: "480px", marginBottom: "1rem", lineHeight: 1.7 }}>
+          Better Than Facebook. Built for Boats.
         </p>
+        <div style={{ display: "flex", gap: "1.5rem", justifyContent: "center", fontSize: "0.85rem", color: "rgba(255,255,255,0.7)", marginBottom: "2rem", flexWrap: "wrap" }}>
+          <span>✔ No spam listings</span>
+          <span>✔ Built for boats</span>
+          <span>✔ Free to list</span>
+        </div>
         <div className="search-box" style={{ display: "flex", background: "white", borderRadius: "10px", overflow: "hidden", boxShadow: "0 8px 40px rgba(0,0,0,0.3)", width: "100%", maxWidth: "520px" }}>
           <input
             value={search}
