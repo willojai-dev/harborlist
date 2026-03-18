@@ -3,13 +3,15 @@ const fs = require("fs");
 const { open } = require("sqlite");
 const sqlite3 = require("sqlite3");
 
-// Use /app/backend/data in production (Railway volume), fallback to db folder locally
-const DB_PATH = process.env.NODE_ENV === "production"
-  ? path.join("/app/backend/data", "harborlist.db")
-  : path.join(__dirname, "harborlist.db");
+const DB_PATH = process.env.DB_PATH || path.join(__dirname, "harborlist.db");
 const UPLOADS_DIR = path.join(__dirname, "..", "uploads");
 
+// Ensure directories exist
+const dbDir = path.dirname(DB_PATH);
+if (!fs.existsSync(dbDir)) fs.mkdirSync(dbDir, { recursive: true });
 if (!fs.existsSync(UPLOADS_DIR)) fs.mkdirSync(UPLOADS_DIR, { recursive: true });
+
+console.log(`Database path: ${DB_PATH}`);
 
 let _db = null;
 
@@ -26,11 +28,9 @@ async function getDb() {
       phone         TEXT,
       created_at    TEXT DEFAULT (datetime('now'))
     );
-
     CREATE TABLE IF NOT EXISTS listings (
       id            TEXT PRIMARY KEY,
       user_id       TEXT NOT NULL REFERENCES users(id) ON DELETE CASCADE,
-      -- Basic
       name          TEXT NOT NULL,
       type          TEXT NOT NULL,
       price         INTEGER NOT NULL,
@@ -41,28 +41,23 @@ async function getDb() {
       lat           REAL,
       lng           REAL,
       description   TEXT,
-      -- Dimensions
       length        REAL NOT NULL,
       beam          REAL,
       draft         REAL,
       hull_material TEXT,
-      -- Propulsion
       engine_make   TEXT,
       engine_model  TEXT,
       engine_hours  INTEGER,
       total_power   TEXT,
       fuel_type     TEXT,
-      -- Tanks (gallons)
       fuel_tank     INTEGER,
       water_tank    INTEGER,
       holding_tank  INTEGER,
-      -- Extra
       category      TEXT,
       capacity      INTEGER,
       created_at    TEXT DEFAULT (datetime('now')),
       updated_at    TEXT DEFAULT (datetime('now'))
     );
-
     CREATE TABLE IF NOT EXISTS listing_photos (
       id          TEXT PRIMARY KEY,
       listing_id  TEXT NOT NULL REFERENCES listings(id) ON DELETE CASCADE,
@@ -71,7 +66,6 @@ async function getDb() {
       sort_order  INTEGER DEFAULT 0,
       created_at  TEXT DEFAULT (datetime('now'))
     );
-
     CREATE TABLE IF NOT EXISTS messages (
       id           TEXT PRIMARY KEY,
       listing_id   TEXT NOT NULL REFERENCES listings(id) ON DELETE CASCADE,
@@ -81,10 +75,9 @@ async function getDb() {
       read         INTEGER DEFAULT 0,
       created_at   TEXT DEFAULT (datetime('now'))
     );
-
-    CREATE INDEX IF NOT EXISTS idx_listings_user   ON listings(user_id);
-    CREATE INDEX IF NOT EXISTS idx_listings_status ON listings(status);
-    CREATE INDEX IF NOT EXISTS idx_photos_listing  ON listing_photos(listing_id);
+    CREATE INDEX IF NOT EXISTS idx_listings_user    ON listings(user_id);
+    CREATE INDEX IF NOT EXISTS idx_listings_status  ON listings(status);
+    CREATE INDEX IF NOT EXISTS idx_photos_listing   ON listing_photos(listing_id);
     CREATE INDEX IF NOT EXISTS idx_messages_listing ON messages(listing_id);
   `);
   return _db;
