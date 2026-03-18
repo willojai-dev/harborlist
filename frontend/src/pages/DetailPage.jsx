@@ -1,25 +1,77 @@
-import { useState, useEffect, useRef } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import { api, photoUrl } from "../api";
 import { useAuth } from "../components/AuthContext";
 import ListingMap from "../components/ListingMap";
 import BoatCard from "../components/BoatCard";
 
-function SpecSection({ title, children }) {
+function SpecRow({ label, value, unit = "" }) {
+  if (!value && value !== 0) return null;
   return (
-    <div style={{ marginBottom: "1.5rem" }}>
-      <h3 style={{ fontSize: "1rem", color: "var(--navy)", fontFamily: "'Playfair Display', serif", marginBottom: "0.8rem", paddingBottom: "6px", borderBottom: "2px solid var(--foam)" }}>{title}</h3>
-      <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "0.7rem" }}>{children}</div>
+    <div style={{ display: "flex", justifyContent: "space-between", alignItems: "baseline", padding: "7px 0", borderBottom: "1px solid rgba(0,0,0,0.05)" }}>
+      <span style={{ fontSize: "0.85rem", color: "var(--muted)", minWidth: "130px" }}>{label}:</span>
+      <span style={{ fontSize: "0.9rem", fontWeight: 500, color: "var(--navy)", textAlign: "right" }}>{value}{unit ? ` ${unit}` : ""}</span>
     </div>
   );
 }
 
-function SpecRow({ label, value, unit = "" }) {
-  if (!value && value !== 0) return null;
+function SpecGroup({ title, children, defaultOpen = true }) {
+  const [open, setOpen] = React.useState(defaultOpen);
+  const hasContent = React.Children.toArray(children).some(c => c);
+  if (!hasContent) return null;
   return (
-    <div style={{ borderBottom: "1px solid rgba(0,0,0,0.05)", paddingBottom: "0.6rem" }}>
-      <div style={{ fontSize: "0.7rem", color: "var(--muted)", textTransform: "uppercase", letterSpacing: "0.5px", marginBottom: "2px" }}>{label}</div>
-      <div style={{ fontWeight: 600, color: "var(--navy)", fontSize: "0.9rem" }}>{value}{unit ? ` ${unit}` : ""}</div>
+    <div style={{ marginBottom: "0" }}>
+      <button onClick={() => setOpen(o => !o)} style={{
+        width: "100%", display: "flex", justifyContent: "space-between", alignItems: "center",
+        padding: "12px 0", background: "none", border: "none", cursor: "pointer",
+        borderBottom: "2px solid var(--foam)",
+      }}>
+        <span style={{ fontFamily: "'Playfair Display', serif", fontSize: "1rem", fontWeight: 700, color: "var(--navy)" }}>{title}</span>
+        <span style={{ color: "var(--muted)", fontSize: "0.85rem" }}>{open ? "▲" : "▼"}</span>
+      </button>
+      {open && <div style={{ paddingTop: "4px", paddingBottom: "12px" }}>{children}</div>}
+    </div>
+  );
+}
+
+function SpecsPanel({ boat }) {
+  return (
+    <div style={{ background: "white", borderRadius: "var(--radius)", padding: "1.8rem", boxShadow: "var(--shadow-sm)", border: "1px solid var(--border)" }}>
+      <h2 style={{ fontSize: "1.2rem", color: "var(--navy)", marginBottom: "1.2rem" }}>Specifications</h2>
+      <div style={{ display: "flex", flexDirection: "column", gap: "0" }}>
+        <SpecGroup title="Overview">
+          <SpecRow label="Type" value={boat.type} />
+          <SpecRow label="Category" value={boat.category} />
+          <SpecRow label="Year" value={boat.year} />
+          <SpecRow label="Condition" value={boat.condition} />
+          <SpecRow label="Hull Material" value={boat.hull_material} />
+          <SpecRow label="Location" value={boat.location} />
+        </SpecGroup>
+        <SpecGroup title="Dimensions">
+          <SpecRow label="Length Overall" value={boat.length} unit="ft" />
+          <SpecRow label="Beam" value={boat.beam} unit="ft" />
+          <SpecRow label="Max Draft" value={boat.draft} unit="ft" />
+        </SpecGroup>
+        <SpecGroup title="Engine">
+          <SpecRow label="Engine Make" value={boat.engine_make} />
+          <SpecRow label="Engine Model" value={boat.engine_model} />
+          <SpecRow label="Engine Type" value={boat.engine_type} />
+          <SpecRow label="Total Power" value={boat.total_power} />
+          <SpecRow label="Fuel Type" value={boat.fuel_type} />
+          <SpecRow label="Engine Hours" value={boat.engine_hours} unit="hrs" />
+        </SpecGroup>
+        <SpecGroup title="Tanks">
+          <SpecRow label="Fuel Tank" value={boat.fuel_tank} unit="gal" />
+          <SpecRow label="Fresh Water" value={boat.water_tank} unit="gal" />
+          <SpecRow label="Holding Tank" value={boat.holding_tank} unit="gal" />
+        </SpecGroup>
+        <SpecGroup title="Accommodations">
+          <SpecRow label="Cabins" value={boat.cabins} />
+          <SpecRow label="Heads" value={boat.heads} />
+          <SpecRow label="Berths" value={boat.berths} />
+          <SpecRow label="Capacity" value={boat.capacity} unit="persons" />
+        </SpecGroup>
+      </div>
     </div>
   );
 }
@@ -238,35 +290,7 @@ export default function DetailPage() {
           </div>
 
           {/* Specs */}
-          <div style={{ background: "white", borderRadius: "var(--radius)", padding: "1.8rem", boxShadow: "var(--shadow-sm)", border: "1px solid var(--border)" }}>
-            <h2 style={{ fontSize: "1.2rem", color: "var(--navy)", marginBottom: "1.2rem" }}>Specifications</h2>
-            <SpecSection title="Overview">
-              <SpecRow label="Type" value={boat.type} />
-              <SpecRow label="Category" value={boat.category} />
-              <SpecRow label="Year" value={boat.year} />
-              <SpecRow label="Condition" value={boat.condition} />
-              <SpecRow label="Location" value={boat.location} />
-              <SpecRow label="Capacity" value={boat.capacity} unit="persons" />
-            </SpecSection>
-            <SpecSection title="Dimensions">
-              <SpecRow label="Length Overall" value={boat.length} unit="ft" />
-              <SpecRow label="Beam" value={boat.beam} unit="ft" />
-              <SpecRow label="Max Draft" value={boat.draft} unit="ft" />
-              <SpecRow label="Hull Material" value={boat.hull_material} />
-            </SpecSection>
-            <SpecSection title="Propulsion">
-              <SpecRow label="Engine Make" value={boat.engine_make} />
-              <SpecRow label="Engine Model" value={boat.engine_model} />
-              <SpecRow label="Total Power" value={boat.total_power} />
-              <SpecRow label="Fuel Type" value={boat.fuel_type} />
-              <SpecRow label="Engine Hours" value={boat.engine_hours} unit="hrs" />
-            </SpecSection>
-            <SpecSection title="Tanks">
-              <SpecRow label="Fuel Tank" value={boat.fuel_tank} unit="gal" />
-              <SpecRow label="Fresh Water Tank" value={boat.water_tank} unit="gal" />
-              <SpecRow label="Holding Tank" value={boat.holding_tank} unit="gal" />
-            </SpecSection>
-          </div>
+          <SpecsPanel boat={boat} />
         </div>
 
         {/* Right sidebar */}

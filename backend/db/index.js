@@ -6,7 +6,6 @@ const sqlite3 = require("sqlite3");
 const DB_PATH = process.env.DB_PATH || path.join(__dirname, "harborlist.db");
 const UPLOADS_DIR = path.join(__dirname, "..", "uploads");
 
-// Ensure directories exist
 const dbDir = path.dirname(DB_PATH);
 if (!fs.existsSync(dbDir)) fs.mkdirSync(dbDir, { recursive: true });
 if (!fs.existsSync(UPLOADS_DIR)) fs.mkdirSync(UPLOADS_DIR, { recursive: true });
@@ -31,6 +30,7 @@ async function getDb() {
     CREATE TABLE IF NOT EXISTS listings (
       id            TEXT PRIMARY KEY,
       user_id       TEXT NOT NULL REFERENCES users(id) ON DELETE CASCADE,
+      -- Basic
       name          TEXT NOT NULL,
       type          TEXT NOT NULL,
       price         INTEGER NOT NULL,
@@ -41,19 +41,27 @@ async function getDb() {
       lat           REAL,
       lng           REAL,
       description   TEXT,
+      category      TEXT,
+      -- Dimensions
       length        REAL NOT NULL,
       beam          REAL,
       draft         REAL,
       hull_material TEXT,
+      -- Engine
       engine_make   TEXT,
       engine_model  TEXT,
+      engine_type   TEXT,
       engine_hours  INTEGER,
       total_power   TEXT,
       fuel_type     TEXT,
+      -- Tanks
       fuel_tank     INTEGER,
       water_tank    INTEGER,
       holding_tank  INTEGER,
-      category      TEXT,
+      -- Accommodations
+      cabins        INTEGER,
+      heads         INTEGER,
+      berths        INTEGER,
       capacity      INTEGER,
       created_at    TEXT DEFAULT (datetime('now')),
       updated_at    TEXT DEFAULT (datetime('now'))

@@ -6,6 +6,7 @@ import { useAuth } from "../components/AuthContext";
 const TYPES = ["Sailboat", "Motorboat", "Yacht", "Pontoon", "Catamaran", "Other"];
 const CONDITIONS = ["Like New", "Excellent", "Good", "Fair", "Project"];
 const FUEL_TYPES = ["Diesel", "Gasoline", "Electric", "Hybrid", "Other"];
+const ENGINE_TYPES = ["Inboard", "Outboard", "Sterndrive", "Jet", "Sail"];
 const HULL_MATERIALS = ["Fiberglass", "Aluminum", "Steel", "Wood", "Carbon Fiber", "Ferrocement", "Other"];
 const CATEGORIES = ["Cruiser", "Bluewater Cruiser", "Racer-Cruiser", "Sport Fishing", "Sport Yacht", "Bowrider", "Pontoon", "Multihull", "Motorsailer", "Daysailer", "Other"];
 
@@ -36,7 +37,7 @@ export default function ListingFormPage() {
   const { user } = useAuth();
   const isEdit = !!id;
 
-  const blank = { name: "", type: "Sailboat", price: "", length: "", beam: "", draft: "", year: new Date().getFullYear(), condition: "Excellent", category: "", hull_material: "", engine_make: "", engine_model: "", total_power: "", fuel_type: "Diesel", engine_hours: "", fuel_tank: "", water_tank: "", holding_tank: "", capacity: "", description: "", location: "", lat: "", lng: "", status: "active" };
+  const blank = { name: "", type: "Sailboat", price: "", length: "", beam: "", draft: "", year: new Date().getFullYear(), condition: "Excellent", category: "", hull_material: "", engine_make: "", engine_model: "", engine_type: "", total_power: "", fuel_type: "Diesel", engine_hours: "", fuel_tank: "", water_tank: "", holding_tank: "", cabins: "", heads: "", berths: "", capacity: "", description: "", location: "", lat: "", lng: "", status: "active" };
   const [form, setForm] = useState(blank);
   const [photos, setPhotos] = useState([]);
   const [existingPhotos, setExistingPhotos] = useState([]);
@@ -67,7 +68,8 @@ export default function ListingFormPage() {
         price: num(form.price), length: num(form.length), beam: num(form.beam),
         draft: num(form.draft), year: num(form.year), engine_hours: num(form.engine_hours),
         fuel_tank: num(form.fuel_tank), water_tank: num(form.water_tank),
-        holding_tank: num(form.holding_tank), capacity: num(form.capacity),
+        holding_tank: num(form.holding_tank), cabins: num(form.cabins),
+        heads: num(form.heads), berths: num(form.berths), capacity: num(form.capacity),
         lat: num(form.lat), lng: num(form.lng),
       };
       let listing = isEdit ? await api.listings.update(id, payload) : await api.listings.create(payload);
@@ -100,7 +102,6 @@ export default function ListingFormPage() {
           <Field label="Condition *"><select style={inputSt} value={form.condition} onChange={set("condition")}>{CONDITIONS.map(c => <option key={c}>{c}</option>)}</select></Field>
           <Field label="Year *"><input style={inputSt} type="number" placeholder="e.g. 2018" value={form.year} onChange={set("year")} /></Field>
           <Field label="Price (USD) *"><input style={inputSt} type="number" placeholder="e.g. 75000" value={form.price} onChange={set("price")} /></Field>
-          <Field label="Capacity (persons)"><input style={inputSt} type="number" placeholder="e.g. 6" value={form.capacity} onChange={set("capacity")} /></Field>
         </Grid>
         <Field label="Description">
           <textarea style={{ ...inputSt, resize: "vertical" }} rows={5} placeholder="Describe your boat's history, upgrades, condition, and what makes it special…" value={form.description} onChange={set("description")} />
@@ -116,10 +117,11 @@ export default function ListingFormPage() {
         </Grid>
       </Section>
 
-      <Section title="Propulsion">
+      <Section title="Engine">
         <Grid>
           <Field label="Engine Make"><input style={inputSt} placeholder="e.g. Yanmar" value={form.engine_make} onChange={set("engine_make")} /></Field>
           <Field label="Engine Model"><input style={inputSt} placeholder="e.g. 4JH45" value={form.engine_model} onChange={set("engine_model")} /></Field>
+          <Field label="Engine Type"><select style={inputSt} value={form.engine_type} onChange={set("engine_type")}><option value="">Select…</option>{ENGINE_TYPES.map(t => <option key={t}>{t}</option>)}</select></Field>
           <Field label="Total Power"><input style={inputSt} placeholder="e.g. 45hp" value={form.total_power} onChange={set("total_power")} /></Field>
           <Field label="Fuel Type"><select style={inputSt} value={form.fuel_type} onChange={set("fuel_type")}><option value="">Select…</option>{FUEL_TYPES.map(f => <option key={f}>{f}</option>)}</select></Field>
           <Field label="Engine Hours"><input style={inputSt} type="number" placeholder="e.g. 450" value={form.engine_hours} onChange={set("engine_hours")} /></Field>
@@ -131,6 +133,15 @@ export default function ListingFormPage() {
           <Field label="Fuel Tank (gal)"><input style={inputSt} type="number" placeholder="e.g. 50" value={form.fuel_tank} onChange={set("fuel_tank")} /></Field>
           <Field label="Fresh Water Tank (gal)"><input style={inputSt} type="number" placeholder="e.g. 80" value={form.water_tank} onChange={set("water_tank")} /></Field>
           <Field label="Holding Tank (gal)"><input style={inputSt} type="number" placeholder="e.g. 20" value={form.holding_tank} onChange={set("holding_tank")} /></Field>
+        </Grid>
+      </Section>
+
+      <Section title="Accommodations">
+        <Grid>
+          <Field label="Cabins"><input style={inputSt} type="number" placeholder="e.g. 2" value={form.cabins} onChange={set("cabins")} /></Field>
+          <Field label="Heads (Bathrooms)"><input style={inputSt} type="number" placeholder="e.g. 1" value={form.heads} onChange={set("heads")} /></Field>
+          <Field label="Berths (Sleeping)"><input style={inputSt} type="number" placeholder="e.g. 4" value={form.berths} onChange={set("berths")} /></Field>
+          <Field label="Capacity (persons)"><input style={inputSt} type="number" placeholder="e.g. 6" value={form.capacity} onChange={set("capacity")} /></Field>
         </Grid>
       </Section>
 

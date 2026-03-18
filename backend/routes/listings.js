@@ -59,13 +59,13 @@ router.get("/:id", optionalAuth, async (req, res) => {
 
 router.post("/", auth, async (req, res) => {
   try {
-    const { name, type, price, length, beam, draft, year, condition, category, hull_material, engine_make, engine_model, total_power, fuel_type, engine_hours, fuel_tank, water_tank, holding_tank, capacity, description, location, lat, lng, status = "active" } = req.body;
+    const { name, type, price, length, beam, draft, year, condition, category, hull_material, engine_make, engine_model, engine_type, total_power, fuel_type, engine_hours, fuel_tank, water_tank, holding_tank, cabins, heads, berths, capacity, description, location, lat, lng, status = "active" } = req.body;
     if (!name || !type || !price || !length || !year || !condition || !location) return res.status(400).json({ error: "Missing required fields" });
     const db = await getDb();
     const id = uuidv4();
-    await db.run(`INSERT INTO listings (id,user_id,name,type,price,length,beam,draft,year,condition,category,hull_material,engine_make,engine_model,total_power,fuel_type,engine_hours,fuel_tank,water_tank,holding_tank,capacity,description,location,lat,lng,status)
-      VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)`,
-      [id, req.user.id, name, type, parseInt(price), parseFloat(length), beam||null, draft||null, parseInt(year), condition, category||null, hull_material||null, engine_make||null, engine_model||null, total_power||null, fuel_type||null, engine_hours||null, fuel_tank||null, water_tank||null, holding_tank||null, capacity||null, description||null, location, lat||null, lng||null, status]);
+    await db.run(`INSERT INTO listings (id,user_id,name,type,price,length,beam,draft,year,condition,category,hull_material,engine_make,engine_model,engine_type,total_power,fuel_type,engine_hours,fuel_tank,water_tank,holding_tank,cabins,heads,berths,capacity,description,location,lat,lng,status)
+      VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)`,
+      [id, req.user.id, name, type, parseInt(price), parseFloat(length), beam||null, draft||null, parseInt(year), condition, category||null, hull_material||null, engine_make||null, engine_model||null, engine_type||null, total_power||null, fuel_type||null, engine_hours||null, fuel_tank||null, water_tank||null, holding_tank||null, cabins||null, heads||null, berths||null, capacity||null, description||null, location, lat||null, lng||null, status]);
     res.status(201).json(await attachPhotos(db, await db.get("SELECT * FROM listings WHERE id = ?", id)));
   } catch (e) { res.status(500).json({ error: e.message }); }
 });
@@ -76,7 +76,7 @@ router.patch("/:id", auth, async (req, res) => {
     const listing = await db.get("SELECT * FROM listings WHERE id = ?", req.params.id);
     if (!listing) return res.status(404).json({ error: "Listing not found" });
     if (listing.user_id !== req.user.id) return res.status(403).json({ error: "Not your listing" });
-    const fields = ["name","type","price","length","beam","draft","year","condition","category","hull_material","engine_make","engine_model","total_power","fuel_type","engine_hours","fuel_tank","water_tank","holding_tank","capacity","description","location","lat","lng","status"];
+    const fields = ["name","type","price","length","beam","draft","year","condition","category","hull_material","engine_make","engine_model","engine_type","total_power","fuel_type","engine_hours","fuel_tank","water_tank","holding_tank","cabins","heads","berths","capacity","description","location","lat","lng","status"];
     const updates = [], vals = [];
     fields.forEach(f => { if (req.body[f] !== undefined) { updates.push(`${f} = ?`); vals.push(req.body[f]); } });
     if (!updates.length) return res.status(400).json({ error: "Nothing to update" });
