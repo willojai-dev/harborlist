@@ -55,9 +55,9 @@ export default function ListingsPage() {
         <p style={{ color: "var(--muted)", fontSize: "0.9rem" }}>{loading ? "Loading…" : `${total} listing${total !== 1 ? "s" : ""} found`}</p>
       </div>
 
-      <div style={{ display: "grid", gridTemplateColumns: "260px 1fr", gap: "2rem", alignItems: "start" }}>
+      <div className="listings-layout" style={{ display: "grid", gridTemplateColumns: "260px 1fr", gap: "2rem", alignItems: "start" }}>
         {/* Filters */}
-        <div style={{ background: "white", borderRadius: "var(--radius)", padding: "1.5rem", boxShadow: "var(--shadow-sm)", border: "1px solid var(--border)", position: "sticky", top: "80px" }}>
+        <div className="listings-filters" style={{ background: "white", borderRadius: "var(--radius)", padding: "1.5rem", boxShadow: "var(--shadow-sm)", border: "1px solid var(--border)", position: "sticky", top: "80px" }}>
           <h3 style={{ fontSize: "1.1rem", color: "var(--navy)", marginBottom: "1.2rem" }}>🔍 Filters</h3>
 
           {[

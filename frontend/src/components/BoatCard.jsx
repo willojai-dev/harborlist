@@ -24,23 +24,28 @@ export default function BoatCard({ boat }) {
         textDecoration: "none",
         border: "1px solid var(--border)",
       }}>
-      {/* Photo */}
-      <div style={{
-        height: "180px",
-        background: imgUrl ? `url(${imgUrl}) center/cover` : "linear-gradient(135deg, var(--navy), var(--ocean))",
-        display: imgUrl ? "block" : "flex",
-        alignItems: "center",
-        justifyContent: "center",
-        fontSize: "4.5rem",
-        position: "relative",
-      }}>
-        {!imgUrl && (boat.type === "Sailboat" ? "⛵" : "🚤")}
+      {/* Photo with fallback */}
+      <div style={{ height: "180px", position: "relative", overflow: "hidden", background: "linear-gradient(135deg, var(--navy), var(--ocean))" }}>
+        {imgUrl ? (
+          <img
+            src={imgUrl}
+            alt={boat.name}
+            onError={e => { e.target.style.display = "none"; }}
+            style={{ width: "100%", height: "100%", objectFit: "cover", display: "block" }}
+          />
+        ) : (
+          <div style={{ height: "100%", display: "flex", alignItems: "center", justifyContent: "center", fontSize: "4.5rem" }}>
+            {boat.type === "Sailboat" ? "⛵" : "🚤"}
+          </div>
+        )}
+        {/* Condition badge */}
         <div style={{
           position: "absolute", top: 10, right: 10,
           background: conditionColor[boat.condition] || "#7f8c8d",
           color: "white", padding: "3px 10px", borderRadius: "20px",
           fontSize: "0.7rem", fontWeight: 600, letterSpacing: "0.4px",
         }}>{boat.condition}</div>
+        {/* Photo count */}
         {boat.photos?.length > 1 && (
           <div style={{
             position: "absolute", bottom: 10, right: 10,

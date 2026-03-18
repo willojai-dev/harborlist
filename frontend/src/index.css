@@ -46,3 +46,44 @@ input, select, textarea, button {
 }
 
 .animate-fade-in { animation: fadeIn 0.4s ease both; }
+
+/* ── Mobile responsive ── */
+@media (max-width: 768px) {
+  /* Listings page: stack sidebar above results */
+  .listings-layout {
+    grid-template-columns: 1fr !important;
+  }
+  .listings-filters {
+    position: static !important;
+  }
+
+  /* Detail page: single column */
+  .detail-layout {
+    grid-template-columns: 1fr !important;
+  }
+
+  /* Dashboard: stack card actions */
+  .dashboard-card {
+    flex-direction: column !important;
+    align-items: flex-start !important;
+  }
+  .dashboard-card-actions {
+    width: 100%;
+    display: flex;
+    gap: 8px;
+  }
+  .dashboard-card-actions a,
+  .dashboard-card-actions button {
+    flex: 1;
+    text-align: center;
+  }
+}
+
+@media (max-width: 480px) {
+  /* Tighter padding on small phones */
+  .page-pad { padding: 1rem !important; }
+  .hero-title { font-size: 1.8rem !important; }
+  .search-box { flex-direction: column !important; border-radius: 10px !important; }
+  .search-box input { border-radius: 10px 10px 0 0 !important; }
+  .search-box button { border-radius: 0 0 10px 10px !important; width: 100% !important; padding: 14px !important; }
+}

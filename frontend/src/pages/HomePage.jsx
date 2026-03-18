@@ -32,13 +32,13 @@ export default function HomePage() {
           <div key={i} style={{ position: "absolute", bottom: i * 18, left: 0, right: 0, height: "2px", background: `rgba(42,157,181,${0.04 + i * 0.04})` }} />
         ))}
         <div style={{ fontSize: "4rem", marginBottom: "1rem", animation: "float 3s ease-in-out infinite" }}>⛵</div>
-        <h1 style={{ fontFamily: "'Playfair Display', serif", fontSize: "clamp(2rem, 5vw, 3.5rem)", color: "white", textAlign: "center", fontWeight: 700, lineHeight: 1.2, marginBottom: "1rem", maxWidth: "680px" }}>
+        <h1 style={{ fontFamily: "'Playfair Display', serif", fontSize: "clamp(1.8rem, 5vw, 3.5rem)", color: "white", textAlign: "center", fontWeight: 700, lineHeight: 1.2, marginBottom: "1rem", maxWidth: "680px" }}>
           Find Your Perfect Boat
         </h1>
         <p style={{ color: "rgba(255,255,255,0.65)", fontSize: "1.05rem", textAlign: "center", maxWidth: "480px", marginBottom: "2.5rem", lineHeight: 1.7 }}>
           Sailboats, motorboats, and yachts listed by owners and dealers nationwide.
         </p>
-        <div style={{ display: "flex", background: "white", borderRadius: "10px", overflow: "hidden", boxShadow: "0 8px 40px rgba(0,0,0,0.3)", width: "100%", maxWidth: "520px" }}>
+        <div className="search-box" style={{ display: "flex", background: "white", borderRadius: "10px", overflow: "hidden", boxShadow: "0 8px 40px rgba(0,0,0,0.3)", width: "100%", maxWidth: "520px" }}>
           <input
             value={search}
             onChange={e => setSearch(e.target.value)}
