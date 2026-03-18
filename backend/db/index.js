@@ -3,7 +3,10 @@ const fs = require("fs");
 const { open } = require("sqlite");
 const sqlite3 = require("sqlite3");
 
-const DB_PATH = path.join(__dirname, "harborlist.db");
+// Use /app/backend/data in production (Railway volume), fallback to db folder locally
+const DB_PATH = process.env.NODE_ENV === "production"
+  ? path.join("/app/backend/data", "harborlist.db")
+  : path.join(__dirname, "harborlist.db");
 const UPLOADS_DIR = path.join(__dirname, "..", "uploads");
 
 if (!fs.existsSync(UPLOADS_DIR)) fs.mkdirSync(UPLOADS_DIR, { recursive: true });
