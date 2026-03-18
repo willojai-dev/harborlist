@@ -123,7 +123,7 @@ export default function DetailPage() {
     if (!msgForm.name || !msgForm.email || !msgForm.body) { setMsgError("All fields required"); return; }
     setSending(true);
     try {
-      await api.messages.send({ listing_id: id, ...msgForm });
+      await api.messages.send({ listing_id: id, sender_name: msgForm.name, sender_email: msgForm.email, body: msgForm.body });
       setMsgSent(true); setMsgError("");
     } catch (e) { setMsgError(e.message); }
     finally { setSending(false); }
