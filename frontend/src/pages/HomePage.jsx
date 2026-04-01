@@ -33,10 +33,10 @@ export default function HomePage() {
         ))}
         <div style={{ fontSize: "4rem", marginBottom: "1rem", animation: "float 3s ease-in-out infinite" }}>⛵</div>
         <h1 style={{ fontFamily: "'Playfair Display', serif", fontSize: "clamp(1.8rem, 5vw, 3.5rem)", color: "white", textAlign: "center", fontWeight: 700, lineHeight: 1.2, marginBottom: "1rem", maxWidth: "680px" }}>
-          Find Your Perfect Boat
+          Tony Sucks at Coding, but he's kinda funny tho
         </h1>
         <p style={{ color: "rgba(255,255,255,0.65)", fontSize: "1.05rem", textAlign: "center", maxWidth: "480px", marginBottom: "1rem", lineHeight: 1.7 }}>
-          Better Than Facebook. Built for Boats.
+          For real tho.
         </p>
         <div style={{ display: "flex", gap: "1.5rem", justifyContent: "center", fontSize: "0.85rem", color: "rgba(255,255,255,0.7)", marginBottom: "2rem", flexWrap: "wrap" }}>
           <span>✔ No spam listings</span>
